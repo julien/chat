@@ -1,0 +1,10 @@
+{
+	"ImportPath": "websocket_chat",
+	"GoVersion": "go1.3",
+	"Deps": [
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Rev": "0e7b5f878f841d76632b20fd79f53ca0efd06fae"
+		}
+	]
+}
