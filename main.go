@@ -7,10 +7,11 @@ import (
   "net/http"
   "path/filepath"
   "text/template"
+  "os"
 )
 
 var (
-  addr =   flag.String("addr", ":9000", "http service address")
+  addr =   flag.String("addr", ":" + os.Getenv("PORT"), "http service address")
   assets = flag.String("assets", defaultAssetPath(), "path to assets")
   homeTpl  *template.Template
 )
