@@ -43,6 +43,10 @@ WebSocket chat with go
 
   `git push heroku master`
 
++ Enable websockets
+  
+  `heroku labs:enable websockets`
+
 + If for some reason you need to stop the app
 
   `heroku ps:scale web=0`
