@@ -2,13 +2,16 @@
 
 Goal: make something to get started with Go.
 
-### 
 
-### Heroku Deployement
-
+Heroku Deployement
+---------------------
   + Make sure you login to heroku 
     
     `heroku login`
+
+  + Enable websockets
+    
+    `heroku labs:enable websockets`
 
   + Initialize git repo
     
@@ -44,10 +47,6 @@ Goal: make something to get started with Go.
   + Push to Heroku
 
     `git push heroku master`
-
-  + Enable websockets
-    
-    `heroku labs:enable websockets`
 
   + If for some reason you need to stop the app
 
