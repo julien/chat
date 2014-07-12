@@ -3,7 +3,6 @@ package main
 import (
   "strings"
   "regexp"
-  "log"
 )
 
 type message struct {
@@ -20,15 +19,9 @@ func (m *message) ToCommand() (bool, string, []string) {
     matches := len(submatch)
 
     if matches > 0 {
-
       rep := strings.NewReplacer("/", "")
-      log.Print("Submatch", len(submatch))
-
       name := rep.Replace(submatch[1])
-      log.Println("Command name here", name)
-
       args := submatch[2:matches]
-
 
       return true, name, args
 

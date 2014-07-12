@@ -1,6 +1,4 @@
-# A WebSocket chat with Go
-
-Goal: make something to get started with Go.
+A WebSocket chat with Go
 
 
 Heroku Deployement

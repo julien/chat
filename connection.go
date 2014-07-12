@@ -4,6 +4,7 @@ import (
   "github.com/gorilla/websocket"
   "net/http"
   "bytes"
+  "time"
 )
 
 type connection struct {
@@ -16,10 +17,10 @@ type connection struct {
   // Named props
   props map[string]string
 
-  // TODO: 
-  // + Add a time stamp for the last message sent (avoid flooding)
-  // lastMessageTime time
-  // + Add "user managment"
+  // A time stamp for the last message sent (avoid flooding)
+  sentTime time.Time
+
+  // Add "user managment"
   // banned map[string]*connection
 }
 
@@ -62,7 +63,12 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
     return
   }
 
-  c := &connection{send: make(chan []byte, 256), ws: ws, props: make(map[string]string)}
+  c := &connection{
+    send: make(chan []byte, 256),
+    ws: ws,
+    props: make(map[string]string),
+    sentTime: time.Now(),
+  }
   h.register <- c
 
   defer func() {

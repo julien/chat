@@ -2,7 +2,8 @@ package main
 
 import (
   "strconv"
-  "log"
+  // "log"
+  "time"
 )
 
 type hub struct {
@@ -23,7 +24,7 @@ var h = hub {
   connections: make(map[*connection]bool),
   register:    make(chan *connection),
   unregister:  make(chan *connection),
-  broadcast:     make(chan *message),
+  broadcast:   make(chan *message),
 }
 
 func (h *hub) numConnections() int {
@@ -88,8 +89,6 @@ func (h *hub) run() {
         }
       }
 
-
-
     case c := <-h.unregister:
 
       if _, ok := h.connections[c]; ok {
@@ -99,7 +98,13 @@ func (h *hub) run() {
 
     case m := <-h.broadcast:
 
-      log.Println("Message from", m.connection.props["name"])
+      now := time.Now()
+      diff := now.Sub(m.connection.sentTime)
+
+      if diff.Seconds() < 1 {
+        return
+      }
+      m.connection.sentTime = time.Now()
 
       isCmd, name, args := m.ToCommand()
       if isCmd {
@@ -130,9 +135,9 @@ func (h *hub) run() {
         for c := range h.connections {
           select {
           case c.send <- msg:
-          default:
-            delete(h.connections, c)
-            close(c.send)
+          // default:
+          //   delete(h.connections, c)
+          //   close(c.send)
           }
         }
       }
