@@ -16,15 +16,12 @@ func formatDigit(value int) string {
 
 func addTimeStamp() string {
   now := time.Now()
- 
   times := []string {
     formatDigit(now.Hour()),
     formatDigit(now.Minute()),
     formatDigit(now.Second()),
   }
-
   res := strings.Join(times, ":")
-
   return res
 }
 

@@ -1,22 +1,29 @@
 SHELL = /bin/bash
-NAME = websocket_chat
 
-all: clean $(NAME) run
+mkfile_path := $(abspath $(lastword $(MAKEFILE_LIST)))
+current_dir := $(notdir $(patsubst %/,%,$(dir $(mkfile_path))))
+app = $(current_dir)
 
-$(NAME): 
-	@echo building $(NAME)
+
+all: clean $(app) run
+
+$(app): 
 	@go build
 
 run:
-	@echo running $(NAME)
-	@PORT=3000 ./${NAME}
+	@echo ...run
+	@PORT=3000 ./${app}
 
 release:
+	@echo ...release
 	@go get
 
 clean:
-	@echo cleaning $(NAME)
-	@rm -rf $(NAME)
+	@echo ...clean
+	@rm -rf $(app)
 
-.PHONY: clean $(NAME) run release
+test:
+	@echo NO TESTS!
+
+.PHONY: clean $(app) run release test
 

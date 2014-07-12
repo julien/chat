@@ -1,55 +1,57 @@
+# A WebSocket chat with Go
 
-WebSocket chat with go
+Goal: make something to get started with Go.
 
-###Heroku Deployement
+### 
 
-+ Make sure you login to heroku 
-  
-  `heroku login`
+### Heroku Deployement
+
+  + Make sure you login to heroku 
+    
+    `heroku login`
+
+  + Initialize git repo
+    
+    `git init`
+
+    `git add -A .`
+
+    `git commit -m "initial commit"`
+
+  + Create Procfile
+    
+    `echo 'webapp: websocket_chat' > Profile`
 
 
-+ Initialize git repo
-  
-  `git init`
+  + Install Godep
 
-  `git add -A .`
+    `go get github.com/kr/godep`
 
-  `git commit -m "initial commit"`
+  + Save your dependencies
 
-+ Create Procfile
-  
-  `echo 'webapp: websocket_chat' > Profile`
+    `godep save`
 
+  + Commit
+    
+    `git add -A .`
 
-+ Install Godep
+    `git commit -m "dependencies"`
 
-  `go get github.com/kr/godep`
+  + Deploy to Heroku using buildpack
 
-+ Save your dependencies
+    `heroku create -b https://github.com/kr/heroku-buildpack-go.git`
 
-  `godep save`
+  + Push to Heroku
 
-+ Commit
-  
-  `git add -A .`
+    `git push heroku master`
 
-  `git commit -m "dependencies"`
+  + Enable websockets
+    
+    `heroku labs:enable websockets`
 
-+ Deploy to Heroku using buildpack
+  + If for some reason you need to stop the app
 
-  `heroku create -b https://github.com/kr/heroku-buildpack-go.git`
-
-+ Push to Heroku
-
-  `git push heroku master`
-
-+ Enable websockets
-  
-  `heroku labs:enable websockets`
-
-+ If for some reason you need to stop the app
-
-  `heroku ps:scale web=0`
+    `heroku ps:scale web=0`
 
 
 

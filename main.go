@@ -17,7 +17,7 @@ var (
 )
 
 func defaultAssetPath() string {
-  p, err := build.Default.Import("websocket_chat", "", build.FindOnly)
+  p, err := build.Default.Import("go_chat", "", build.FindOnly)
 
   if err != nil {
     return "."
@@ -32,15 +32,16 @@ func homeHandler(c http.ResponseWriter, req *http.Request) {
 func main() {
   flag.Parse()
 
-  homeTpl = template.Must(template.ParseFiles(filepath.Join(*assets, "home.html")))
+  homeTpl = template.Must(template.ParseFiles(filepath.Join(*assets, "client.html")))
 
   go h.run()
 
   http.HandleFunc("/",   homeHandler)
   http.HandleFunc("/ws", wsHandler)
 
+  log.Println("Starting server...")
+
   if err := http.ListenAndServe(*addr, nil); err != nil {
     log.Fatal("ListenAndServe:", err)
   }
-
 }
