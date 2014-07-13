@@ -12,7 +12,7 @@ type message struct {
 
 func (m *message) ToCommand() (bool, string, []string) {
 
-  isCmd := regexp.MustCompile(`(\/\w+){1}((\W(\w+))?)+`)
+  isCmd := regexp.MustCompile(`^(\/\w+){1}((\W(\w+))?)+`)
 
   if isCmd.MatchString(string(m.body)) {
     submatch := isCmd.FindStringSubmatch(string(m.body))

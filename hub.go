@@ -27,7 +27,7 @@ var h = hub {
   broadcast:   make(chan *message),
 }
 
-func (h *hub) numConnections() int {
+func (h *hub) NumConnections() int {
   count := 0
   for _, connected := range h.connections {
     if connected {
@@ -37,7 +37,7 @@ func (h *hub) numConnections() int {
   return count
 }
 
-func (h *hub) clientByName(name string) *connection {
+func (h *hub) ClientByName(name string) *connection {
   for c := range h.connections {
     if name == c.props["name"] {
       return c
@@ -46,16 +46,16 @@ func (h *hub) clientByName(name string) *connection {
   return nil
 }
 
-func (h *hub) setConnectionName(c *connection, name string) (bool, string) {
-  if c.props["name"] != name {
-    c.props["name"] = name
-    return true, c.props["name"]
+func (h *hub) ConnectionProperty(c *connection, prop string, value string) bool {
+  if c.props[prop] != value {
+    c.props[prop] = value
+    return true
   } else {
-    return false, name
+    return false
   }
 }
 
-func (h *hub) run() {
+func (h *hub) Run() {
   for {
     select {
 
@@ -63,7 +63,7 @@ func (h *hub) run() {
 
       h.connections[c] = true
 
-      currConn := strconv.FormatInt(int64(h.numConnections()), 10)
+      currConn := strconv.FormatInt(int64(h.NumConnections()), 10)
 
       c.send <- []byte("Welcome")
       c.send <- []byte("")
@@ -106,14 +106,35 @@ func (h *hub) run() {
       }
       m.connection.sentTime = time.Now()
 
+
       isCmd, name, args := m.ToCommand()
       if isCmd {
+
         switch name {
         case "name":
-          changed, newName := h.setConnectionName(m.connection, args[0])
+          oldName := m.connection.props["name"]
+          changed := h.ConnectionProperty(m.connection, "name", args[0])
           if changed {
-            m.connection.send <- []byte("Your name was changed to " + newName)
+            // m.connection.send <- []byte("Your name was changed to" + m.connection.props["name"])
+
+            for c := range h.connections {
+              select {
+              case c.send <- []byte(oldName + " changed his name to " + m.connection.props["name"]):
+              }
+            }
           }
+
+        case "users":
+          m.connection.send <- []byte("")
+          m.connection.send <- []byte("***********************************")
+          m.connection.send <- []byte("Connected users:")
+
+          // names := make([]string, h.NumConnections())
+          for c := range h.connections {
+            m.connection.send <- []byte(" + " + c.props["name"])
+          }
+          m.connection.send <- []byte("***********************************")
+          m.connection.send <- []byte("")
 
         default:
           m.connection.send <- []byte("")

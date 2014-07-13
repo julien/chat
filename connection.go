@@ -24,7 +24,7 @@ type connection struct {
   // banned map[string]*connection
 }
 
-func (c *connection) reader() {
+func (c *connection) Reader() {
   for {
     _, msg, err := c.ws.ReadMessage()
 
@@ -38,7 +38,7 @@ func (c *connection) reader() {
   //  c.ws.Close()
 }
 
-func (c *connection) writer() {
+func (c *connection) Writer() {
   for msg := range c.send {
 
     ts := []byte(addTimeStamp())
@@ -75,6 +75,6 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
     h.unregister <- c
   }()
 
-  go c.writer()
-  c.reader()
+  go c.Writer()
+  c.Reader()
 }

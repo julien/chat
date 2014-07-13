@@ -22,11 +22,16 @@ func defaultAssetPath() string {
   if err != nil {
     return "."
   }
+
   return p.Dir
 }
 
-func homeHandler(c http.ResponseWriter, req *http.Request) {
-  homeTpl.Execute(c, req.Host)
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+  homeTpl.Execute(w, r.Host)
+}
+
+func fileHandler(w http.ResponseWriter, r *http.Request) {
+  http.ServeFile(w, r, r.URL.Path[1:])
 }
 
 func main() {
@@ -34,9 +39,10 @@ func main() {
 
   homeTpl = template.Must(template.ParseFiles(filepath.Join(*assets, "client.html")))
 
-  go h.run()
+  go h.Run()
 
-  http.HandleFunc("/",   homeHandler)
+  http.HandleFunc("/", homeHandler)
+  http.HandleFunc("/assets/", fileHandler)
   http.HandleFunc("/ws", wsHandler)
 
   log.Println("Starting server...")
