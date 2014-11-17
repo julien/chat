@@ -1,1 +1,1 @@
-web: websocket_chat
+web: go_chat
